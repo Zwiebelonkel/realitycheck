@@ -1,12 +1,7 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
-interface MediaItem {
-  url: string;
-  isReal: boolean;
-  hint: string;
-}
+import { ImagePoolService, MediaItem } from '../services/image-pool.service';
 
 @Component({
   selector: 'app-game-page',
@@ -33,27 +28,6 @@ export class GamePageComponent implements OnInit, OnDestroy {
   isDragging = false;
   dragOffset = 0;
 
-  readonly aiByDifficulty: Record<string, MediaItem[]> = {
-    easy: [
-      { url: 'images/ai/easy/ai-easy-1.svg', isReal: false, hint: 'Die Farben sind unnatürlich gesättigt und die Formen zu perfekt.' },
-      { url: 'images/ai/easy/ai-easy-2.svg', isReal: false, hint: 'Kanten und Strukturen wirken wie gemalt statt fotografiert.' },
-    ],
-    medium: [
-      { url: 'images/ai/medium/ai-medium-1.svg', isReal: false, hint: 'Das Bild hat gleichmäßige Textur ohne echte Kamerakörnung.' },
-      { url: 'images/ai/medium/ai-medium-2.svg', isReal: false, hint: 'Licht und Schatten passen nicht ganz natürlich zusammen.' },
-    ],
-    hard: [
-      { url: 'images/ai/hard/ai-hard-1.svg', isReal: false, hint: 'Viele Details wiederholen sich in einem erkennbaren Muster.' },
-      { url: 'images/ai/hard/ai-hard-2.svg', isReal: false, hint: 'Gesichtsproportionen sind knapp daneben und wirken synthetisch.' },
-    ],
-  };
-
-  readonly realItems: MediaItem[] = [
-    { url: 'images/real/real-portrait-1.svg', isReal: true, hint: 'Kleine Unregelmäßigkeiten in Licht und Hauttönen sprechen für ein echtes Foto.' },
-    { url: 'images/real/real-street-2.svg', isReal: true, hint: 'Perspektive und Schatten folgen einer konsistenten Szene.' },
-    { url: 'images/real/real-food-3.svg', isReal: true, hint: 'Texturen sind variabel und nicht gleichförmig geglättet.' },
-  ];
-
   items: MediaItem[] = [];
 
   get currentItem(): MediaItem {
@@ -67,6 +41,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private imagePoolService: ImagePoolService,
   ) {}
 
   ngOnInit() {
@@ -79,29 +54,13 @@ export class GamePageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {}
 
   initializeItems() {
-    const aiPool = this.aiByDifficulty[this.difficulty] ?? this.aiByDifficulty['medium'];
-    const combined: MediaItem[] = [];
-
-    for (let i = 0; i < this.totalRounds; i++) {
-      const sourcePool = i % 2 === 0 ? aiPool : this.realItems;
-      combined.push({ ...sourcePool[i % sourcePool.length] });
-    }
-
-    this.items = this.shuffle(combined);
+    this.items = this.imagePoolService.createRoundItems(this.difficulty, this.totalRounds);
     this.currentIndex = 0;
     this.score = 0;
     this.results = [];
     this.wrongGuessHint = '';
   }
 
-  shuffle<T>(arr: T[]): T[] {
-    const copy = [...arr];
-    for (let i = copy.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [copy[i], copy[j]] = [copy[j], copy[i]];
-    }
-    return copy;
-  }
 
   guessReal() { this.processGuess(true); }
   guessAI() { this.processGuess(false); }

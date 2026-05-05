@@ -221,6 +221,17 @@
     color: #aaa;
     text-transform: uppercase;
   }
+
+  .feedback-hint {
+    max-width: 80%;
+    text-align: center;
+    font-size: 0.72rem;
+    color: #f2f2f2;
+    line-height: 1.35;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 0.45rem 0.6rem;
+    border-radius: 4px;
+  }
 }
 
 /* Actions */

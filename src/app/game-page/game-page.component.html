@@ -48,6 +48,9 @@
       <span class="feedback-truth">
         {{ currentItem?.isReal ? "This was REAL" : "This was AI" }}
       </span>
+      <span class="feedback-hint" *ngIf="feedbackState === 'wrong' && wrongGuessHint">
+        Hinweis: {{ wrongGuessHint }}
+      </span>
     </div>
 
     <!-- Card -->

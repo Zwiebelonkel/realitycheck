@@ -1,0 +1,325 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap");
+
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.page {
+  min-height: 100vh;
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 1.5rem;
+  position: relative;
+  font-family: "Space Mono", monospace;
+  color: #e8e8e8;
+  overflow: hidden;
+}
+
+/* Noise texture overlay */
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+header,
+main,
+footer {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  padding-top: 1rem;
+  animation: fadeDown 0.6s ease both;
+}
+
+.logo-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.logo-bracket {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2.8rem;
+  color: #ff2d2d;
+  line-height: 1;
+}
+
+.logo-text {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2.8rem;
+  letter-spacing: 0.08em;
+  color: #e8e8e8;
+}
+
+.accent {
+  color: #ff2d2d;
+}
+
+.tagline {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #555;
+  margin-top: 0.25rem;
+}
+
+/* Main */
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.prompt {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: #444;
+  animation: fadeIn 0.8s 0.2s ease both;
+}
+
+/* Difficulty Cards */
+.difficulty-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  animation: fadeIn 0.8s 0.3s ease both;
+}
+
+.diff-card {
+  position: relative;
+  background: transparent;
+  border: 1px solid #222;
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 0.2rem 0;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background 0.2s;
+  }
+
+  .diff-indicator {
+    grid-column: 2;
+    grid-row: 1;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid #333;
+    align-self: center;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
+  }
+
+  .diff-label {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    color: #666;
+    grid-column: 1;
+    grid-row: 1;
+    transition: color 0.2s;
+  }
+
+  .diff-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: #444;
+    grid-column: 1;
+    grid-row: 2;
+    transition: color 0.2s;
+  }
+
+  .diff-desc {
+    font-size: 0.55rem;
+    color: #333;
+    grid-column: 1 / 3;
+    grid-row: 3;
+    margin-top: 0.4rem;
+    transition: color 0.2s;
+  }
+
+  &[data-level="easy"]:hover,
+  &[data-level="easy"].selected {
+    border-color: #2dff7a;
+    background: rgba(45, 255, 122, 0.04);
+    &::before {
+      background: #2dff7a;
+    }
+    .diff-label {
+      color: #2dff7a;
+    }
+    .diff-sub {
+      color: #2dff7a88;
+    }
+    .diff-desc {
+      color: #555;
+    }
+    .diff-indicator {
+      background: #2dff7a;
+      border-color: #2dff7a;
+    }
+  }
+
+  &[data-level="medium"]:hover,
+  &[data-level="medium"].selected {
+    border-color: #ffb82d;
+    background: rgba(255, 184, 45, 0.04);
+    &::before {
+      background: #ffb82d;
+    }
+    .diff-label {
+      color: #ffb82d;
+    }
+    .diff-sub {
+      color: #ffb82d88;
+    }
+    .diff-desc {
+      color: #555;
+    }
+    .diff-indicator {
+      background: #ffb82d;
+      border-color: #ffb82d;
+    }
+  }
+
+  &[data-level="hard"]:hover,
+  &[data-level="hard"].selected {
+    border-color: #ff2d2d;
+    background: rgba(255, 45, 45, 0.04);
+    &::before {
+      background: #ff2d2d;
+    }
+    .diff-label {
+      color: #ff2d2d;
+    }
+    .diff-sub {
+      color: #ff2d2d88;
+    }
+    .diff-desc {
+      color: #555;
+    }
+    .diff-indicator {
+      background: #ff2d2d;
+      border-color: #ff2d2d;
+    }
+  }
+}
+
+/* Start Button */
+.start-btn {
+  width: 100%;
+  padding: 1rem;
+  background: #ff2d2d;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-family: "Space Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition:
+    background 0.2s,
+    opacity 0.2s,
+    transform 0.15s;
+  animation: fadeIn 0.8s 0.5s ease both;
+
+  &:hover:not(:disabled) {
+    background: #e01e1e;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+
+  .start-arrow {
+    font-size: 1rem;
+    transition: transform 0.2s;
+  }
+
+  &:hover:not(:disabled) .start-arrow {
+    transform: translateX(4px);
+  }
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.55rem;
+  color: #2a2a2a;
+  letter-spacing: 0.1em;
+  animation: fadeIn 1s 0.6s ease both;
+
+  .dot {
+    color: #333;
+  }
+}
+
+/* Animations */
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

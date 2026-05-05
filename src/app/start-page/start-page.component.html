@@ -1,0 +1,46 @@
+<div class="page">
+  <div class="noise"></div>
+
+  <header class="header">
+    <div class="logo-line">
+      <span class="logo-bracket">[</span>
+      <span class="logo-text">REALITY<span class="accent">CHECK</span></span>
+      <span class="logo-bracket">]</span>
+    </div>
+    <p class="tagline">Can you tell what's real?</p>
+  </header>
+
+  <main class="main">
+    <div class="prompt">SELECT DIFFICULTY</div>
+
+    <div class="difficulty-grid">
+      <button
+        *ngFor="let d of difficulties"
+        class="diff-card"
+        [class.selected]="selectedDifficulty === d.key"
+        [attr.data-level]="d.key"
+        (click)="select(d.key)"
+      >
+        <span class="diff-label">{{ d.label }}</span>
+        <span class="diff-sub">{{ d.sub }}</span>
+        <span class="diff-desc">{{ d.desc }}</span>
+        <span class="diff-indicator"></span>
+      </button>
+    </div>
+
+    <button
+      class="start-btn"
+      [disabled]="!selectedDifficulty"
+      (click)="start()"
+    >
+      <span class="start-text">START SESSION</span>
+      <span class="start-arrow">→</span>
+    </button>
+  </main>
+
+  <footer class="footer">
+    <span>HSB · ZIMT · 2026</span>
+    <span class="dot">·</span>
+    <span>AI Media Literacy</span>
+  </footer>
+</div>

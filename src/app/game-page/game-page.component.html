@@ -1,0 +1,90 @@
+<div class="page">
+  <div class="noise"></div>
+
+  <!-- Header -->
+  <header class="hdr">
+    <div class="hdr-left">
+      <span class="round-counter"
+        >{{ currentIndex + 1
+        }}<span class="total">/{{ totalRounds }}</span></span
+      >
+    </div>
+    <div class="hdr-center logo">REALITY<span class="accent">CHECK</span></div>
+    <div class="hdr-right score">
+      <span class="score-num">{{ score }}</span>
+      <span class="score-label">pts</span>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="progress-track">
+    <div class="progress-fill" [style.width.%]="progressPercent"></div>
+  </div>
+
+  <!-- Card Area -->
+  <div class="card-area">
+    <!-- Swipe Hints -->
+    <div
+      class="hint hint-ai"
+      [style.opacity]="hintDirection === 'left' ? hintOpacity : 0"
+    >
+      <span>AI</span>
+    </div>
+    <div
+      class="hint hint-real"
+      [style.opacity]="hintDirection === 'right' ? hintOpacity : 0"
+    >
+      <span>REAL</span>
+    </div>
+
+    <!-- Feedback Overlay -->
+    <div
+      class="feedback-overlay"
+      [class.visible]="feedbackState !== 'none'"
+      [class.correct]="feedbackState === 'correct'"
+      [class.wrong]="feedbackState === 'wrong'"
+    >
+      <span class="feedback-text">{{ feedbackLabel }}</span>
+      <span class="feedback-truth">
+        {{ currentItem?.isReal ? "This was REAL" : "This was AI" }}
+      </span>
+    </div>
+
+    <!-- Card -->
+    <div
+      class="card"
+      [class.swipe-left]="swipeState === 'left'"
+      [class.swipe-right]="swipeState === 'right'"
+      [ngStyle]="cardStyle"
+      (mousedown)="onMouseDown($event)"
+      (touchstart)="onTouchStart($event)"
+      (touchmove)="onTouchMove($event)"
+      (touchend)="onTouchEnd()"
+    >
+      <img [src]="currentItem.url" alt="Media to evaluate" draggable="false" />
+      <div class="card-gradient"></div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="actions">
+    <button class="btn btn-ai" (click)="guessAI()" [disabled]="isTransitioning">
+      <span class="btn-icon">←</span>
+      <span class="btn-label">A I</span>
+    </button>
+    <div class="btn-divider"></div>
+    <button
+      class="btn btn-real"
+      (click)="guessReal()"
+      [disabled]="isTransitioning"
+    >
+      <span class="btn-label">REAL</span>
+      <span class="btn-icon">→</span>
+    </button>
+  </div>
+
+  <!-- Difficulty Badge -->
+  <div class="diff-badge" [attr.data-diff]="difficulty">
+    {{ difficulty | uppercase }}
+  </div>
+</div>

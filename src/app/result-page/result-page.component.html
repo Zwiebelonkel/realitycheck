@@ -1,0 +1,79 @@
+<div class="page">
+  <div class="noise"></div>
+
+  <header class="hdr">
+    <div class="logo">REALITY<span class="accent">CHECK</span></div>
+    <div class="session-info">
+      {{ difficulty | uppercase }} · {{ total }} ROUNDS
+    </div>
+  </header>
+
+  <main class="main" *ngIf="activeTier">
+    <!-- Tier Title -->
+    <div class="tier-section">
+      <div class="tier-eyebrow">YOUR CLASSIFICATION</div>
+      <div class="tier-label" [style.color]="activeTier.color">
+        {{ activeTier.label }}
+      </div>
+      <p class="tier-desc">{{ activeTier.desc }}</p>
+    </div>
+
+    <!-- Accuracy Ring -->
+    <div class="accuracy-block">
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 120 120">
+          <circle class="ring-bg" cx="60" cy="60" r="50" />
+          <circle
+            class="ring-fill"
+            cx="60"
+            cy="60"
+            r="50"
+            [style.stroke]="activeTier.color"
+            [style.stroke-dashoffset]="314 - (314 * accuracy) / 100"
+          />
+        </svg>
+        <div class="ring-inner">
+          <span class="accuracy-num">{{ accuracy }}</span>
+          <span class="accuracy-pct">%</span>
+        </div>
+      </div>
+      <div class="score-line">
+        <span class="score-val">{{ score }}</span>
+        <span class="score-sep">/</span>
+        <span class="score-total">{{ total }}</span>
+        <span class="score-lbl">correct</span>
+      </div>
+    </div>
+
+    <!-- Tier breakdown -->
+    <div class="tiers-overview">
+      <div
+        *ngFor="let t of tiers"
+        class="tier-row"
+        [class.active]="t.label === activeTier.label"
+      >
+        <div
+          class="tier-dot"
+          [style.background]="
+            t.label === activeTier.label ? t.color : 'transparent'
+          "
+          [style.border-color]="t.color"
+        ></div>
+        <span
+          class="tier-row-label"
+          [style.color]="t.label === activeTier.label ? t.color : '#333'"
+          >{{ t.label }}</span
+        >
+        <span class="tier-row-range">{{ t.min }}–{{ t.max }}%</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="btn btn-retry" (click)="retry()">RETRY THIS MODE</button>
+    <button class="btn btn-home" (click)="playAgain()">
+      CHANGE DIFFICULTY
+    </button>
+  </div>
+</div>

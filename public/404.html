@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+  <head>
+    <script>
+      const base = "/reality-check";
+      const path = window.location.pathname.replace(base, "") || "/";
+      window.location.replace(base + "/?redirect=" + encodeURIComponent(path));
+    </script>
+  </head>
+</html>
